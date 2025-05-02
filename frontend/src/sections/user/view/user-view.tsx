@@ -30,7 +30,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { UserChartGenerator } from '../user-chart-generator';
 
 
-const backendUrl = 'https://dynamic-table-backend.vercel.app/';
+const backendUrl = 'https://dynamic-table-backend.vercel.app';
 
 // Custom components
 const DashboardContent: React.FC<{ children: React.ReactNode }> = ({ children }) => (
