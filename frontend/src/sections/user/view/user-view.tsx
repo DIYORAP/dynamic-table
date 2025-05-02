@@ -484,17 +484,16 @@ export function UserView() {
       await fetchTables();
     } catch (error) {
       console.error('Error adding record:', error);
-      alert('Error adding record');
     }
   };
 
   const handleCreateTable = async () => {
     if (!newTableName) {
-      alert('Table name is required');
+      console.log('Table name is required');
       return;
     }
     if (tables.some((t) => t.name === newTableName)) {
-      alert('Table name already exists');
+      console.log('Table name already exists');
       return;
     }
     try {
@@ -504,7 +503,7 @@ export function UserView() {
       await fetchTables();
     } catch (error) {
       console.error('Error creating table:', error);
-      alert('Error creating table');
+      console.log('Error creating table');
     }
   };
 
@@ -517,7 +516,7 @@ export function UserView() {
       const data = XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet);
 
       if (!data.length) {
-        alert('No data found in the Excel file');
+        console.log('No data found in the Excel file');
         return;
       }
 
@@ -528,7 +527,7 @@ export function UserView() {
         await axios.post(`${backendUrl}/api/tables`, { name: tableName });
       } else if (table.headers.length > 0) {
         if (!columns.every((col) => table.headers.includes(col))) {
-          alert('Uploaded data headers do not match table structure');
+          console.log('Uploaded data headers do not match table structure');
           return;
         }
       }
@@ -537,7 +536,7 @@ export function UserView() {
       await fetchTables();
     } catch (error) {
       console.error('Error uploading file:', error);
-      alert('Error uploading file');
+      console.log('Error uploading file');
     } finally {
       setUploading(false);
     }
