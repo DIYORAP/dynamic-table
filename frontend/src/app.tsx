@@ -2,7 +2,6 @@ import 'src/global.css';
 
 import { useEffect } from 'react';
 
-
 import { usePathname } from 'src/routes/hooks';
 
 import { ThemeProvider } from 'src/theme/theme-provider';

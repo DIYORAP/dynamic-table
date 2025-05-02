@@ -1,30 +1,30 @@
 import { useState } from 'react';
 import {
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    Card,
-    CardContent,
-    Typography,
-    TextField,
-    Select,
-    MenuItem,
-    InputLabel,
-    FormControl,
-    Button as MuiButton,
-    Stack,
-    Divider,
-    Box,
-    Paper,
-    Grid
-} from '@mui/material';
-
-import {
-    PieChart, Pie, Cell,
-    BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
-    LineChart, Line,
+    Pie, Bar, Cell,
+    Line, XAxis, YAxis, Legend, Tooltip, PieChart, BarChart,
+    LineChart, CartesianGrid,
     ResponsiveContainer
 } from 'recharts';
+
+import {
+    Box,
+    Card,
+    Grid,
+    Stack,
+    Paper,
+    Dialog,
+    Select,
+    Divider,
+    MenuItem,
+    TextField,
+    Typography,
+    InputLabel,
+    DialogTitle,
+    CardContent,
+    FormControl,
+    DialogContent,
+    Button as MuiButton
+} from '@mui/material';
 
 const chartTypes = [
     { type: 'pie', label: 'Pie Chart' },

@@ -1,28 +1,32 @@
-import { useState, useCallback, useEffect, ChangeEvent } from 'react';
-import UploadFileIcon from '@mui/icons-material/UploadFile';
-import AddIcon from '@mui/icons-material/Add';
-import CreateIcon from '@mui/icons-material/Create';
+import type { ChangeEvent } from 'react';
+
+import axios from 'axios';
+import * as XLSX from 'xlsx';
+import { useState, useEffect, useCallback } from 'react';
+
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
+import Dialog from '@mui/material/Dialog';
+import AddIcon from '@mui/icons-material/Add';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import Dialog from '@mui/material/Dialog';
+import CreateIcon from '@mui/icons-material/Create';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
-import TextField from '@mui/material/TextField';
-import CircularProgress from '@mui/material/CircularProgress';
+import TableContainer from '@mui/material/TableContainer';
 import TableSortLabel from '@mui/material/TableSortLabel';
-import * as XLSX from 'xlsx';
-import axios from 'axios';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
+import TablePagination from '@mui/material/TablePagination';
+import CircularProgress from '@mui/material/CircularProgress';
+
 import { UserChartGenerator } from '../user-chart-generator';
 
 
@@ -169,15 +173,13 @@ const applyFilter = ({
   );
 };
 
-const getComparator = (order: 'asc' | 'desc', orderBy: string) => {
-  return (a: Record<string, unknown>, b: Record<string, unknown>): number => {
+const getComparator = (order: 'asc' | 'desc', orderBy: string) => (a: Record<string, unknown>, b: Record<string, unknown>): number => {
     const valueA = a[orderBy] ?? '';
     const valueB = b[orderBy] ?? '';
     return order === 'asc'
       ? String(valueA).localeCompare(String(valueB))
       : String(valueB).localeCompare(String(valueA));
   };
-};
 
 const emptyRows = (page: number, rowsPerPage: number, dataLength: number): number =>
   Math.max(0, (1 + page) * rowsPerPage - dataLength);
