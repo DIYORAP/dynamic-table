@@ -1,9 +1,8 @@
 {
-  "name": "@minimal/material-kit-react",
+  "name": "dynamic-dashboard",
+  "description": "Dynamic Dashboard for Minimal Admin Template",
   "author": "minimals.cc",
-  "licence": "MIT",
   "version": "3.0.0",
-  "private": false,
   "type": "module",
   "scripts": {
     "dev": "vite",
