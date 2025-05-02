@@ -3,7 +3,6 @@ import {
     Dialog,
     DialogTitle,
     DialogContent,
-    Grid,
     Card,
     CardContent,
     Typography,
@@ -16,7 +15,8 @@ import {
     Stack,
     Divider,
     Box,
-    Paper
+    Paper,
+    Grid
 } from '@mui/material';
 
 import {
@@ -33,7 +33,12 @@ const chartTypes = [
     { type: 'donut', label: 'Donut Chart' }
 ];
 
-export function UserChartGenerator({ data, fields }: { data: any[]; fields: string[] }) {
+interface UserChartGeneratorProps {
+    data: Record<string, any>[];
+    fields: string[];
+}
+
+export function UserChartGenerator({ data, fields }: UserChartGeneratorProps) {
     const [isSelectionOpen, setIsSelectionOpen] = useState(false);
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [chartType, setChartType] = useState<string | null>(null);
@@ -45,11 +50,11 @@ export function UserChartGenerator({ data, fields }: { data: any[]; fields: stri
     const processData = () => {
         if (!selectedField || !data.length) return [];
 
-        const fieldValues = data.map(row => row[selectedField]);
+        const fieldValues = data.map((row) => row[selectedField]);
 
         if (dataType === 'count') {
             const counts: Record<string, number> = {};
-            fieldValues.forEach(value => {
+            fieldValues.forEach((value) => {
                 counts[value] = (counts[value] || 0) + 1;
             });
 
@@ -65,9 +70,11 @@ export function UserChartGenerator({ data, fields }: { data: any[]; fields: stri
     const handleCreateChart = () => {
         const processedData = processData();
 
-        let chartComponent;
+        let chartComponent: React.ReactNode = null;
+
         switch (chartType) {
             case 'pie':
+            case 'donut': {
                 chartComponent = (
                     <ResponsiveContainer width="100%" height={300}>
                         <PieChart>
@@ -75,12 +82,18 @@ export function UserChartGenerator({ data, fields }: { data: any[]; fields: stri
                                 data={processedData}
                                 dataKey="value"
                                 nameKey="name"
-                                outerRadius={80}
+                                outerRadius={chartType === 'donut' ? 60 : 80}
+                                innerRadius={chartType === 'donut' ? 30 : 0}
                                 fill="#8884d8"
-                                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                                label={({ name, percent }) =>
+                                    `${name}: ${(percent * 100).toFixed(0)}%`
+                                }
                             >
-                                {processedData.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={`#${Math.floor(Math.random() * 16777215).toString(16)}`} />
+                                {processedData.map((_, index) => (
+                                    <Cell
+                                        key={`cell-${index}`}
+                                        fill={`#${Math.floor(Math.random() * 16777215).toString(16)}`}
+                                    />
                                 ))}
                             </Pie>
                             <Tooltip />
@@ -88,8 +101,9 @@ export function UserChartGenerator({ data, fields }: { data: any[]; fields: stri
                     </ResponsiveContainer>
                 );
                 break;
+            }
 
-            case 'bar':
+            case 'bar': {
                 chartComponent = (
                     <ResponsiveContainer width="100%" height={300}>
                         <BarChart data={processedData}>
@@ -103,8 +117,9 @@ export function UserChartGenerator({ data, fields }: { data: any[]; fields: stri
                     </ResponsiveContainer>
                 );
                 break;
+            }
 
-            case 'line':
+            case 'line': {
                 chartComponent = (
                     <ResponsiveContainer width="100%" height={300}>
                         <LineChart data={processedData}>
@@ -118,9 +133,10 @@ export function UserChartGenerator({ data, fields }: { data: any[]; fields: stri
                     </ResponsiveContainer>
                 );
                 break;
+            }
 
             default:
-                chartComponent = null;
+                break;
         }
 
         setGeneratedChart(chartComponent);
@@ -129,7 +145,7 @@ export function UserChartGenerator({ data, fields }: { data: any[]; fields: stri
 
     return (
         <Box sx={{ mt: 3 }}>
-            <Box sx={{ mt: 3, mb: 2, display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 1 }}>
+            <Box sx={{ mt: 3, mb: 2, display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
                 <MuiButton
                     variant="contained"
                     onClick={() => setIsSelectionOpen(true)}
@@ -144,19 +160,18 @@ export function UserChartGenerator({ data, fields }: { data: any[]; fields: stri
                     <Typography variant="h6" gutterBottom>
                         {chartTitle || 'User Data Chart'}
                     </Typography>
-                    <div style={{ width: '100%', height: 400 }}>
+                    <Box sx={{ width: '100%', height: 400 }}>
                         {generatedChart}
-                    </div>
+                    </Box>
                 </Paper>
             )}
 
-            {/* Chart Type Selection Dialog */}
             <Dialog open={isSelectionOpen} onClose={() => setIsSelectionOpen(false)} maxWidth="md" fullWidth>
                 <DialogTitle>Select Chart Type</DialogTitle>
                 <DialogContent>
                     <Grid container spacing={3} sx={{ mt: 1 }}>
                         {chartTypes.map((chart) => (
-                            <Grid item xs={6} sm={4} key={chart.type}>
+                            <Grid container key={chart.type}>
                                 <Card
                                     onClick={() => {
                                         setChartType(chart.type);
@@ -180,7 +195,6 @@ export function UserChartGenerator({ data, fields }: { data: any[]; fields: stri
                 </DialogContent>
             </Dialog>
 
-            {/* Chart Settings Dialog */}
             <Dialog open={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} maxWidth="sm" fullWidth>
                 <DialogTitle>Chart Settings</DialogTitle>
                 <DialogContent>
@@ -223,10 +237,13 @@ export function UserChartGenerator({ data, fields }: { data: any[]; fields: stri
                         <Divider />
 
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <MuiButton variant="outlined" onClick={() => {
-                                setIsSettingsOpen(false);
-                                setIsSelectionOpen(true);
-                            }}>
+                            <MuiButton
+                                variant="outlined"
+                                onClick={() => {
+                                    setIsSettingsOpen(false);
+                                    setIsSelectionOpen(true);
+                                }}
+                            >
                                 Back
                             </MuiButton>
                             <MuiButton variant="contained" onClick={handleCreateChart}>
@@ -239,3 +256,4 @@ export function UserChartGenerator({ data, fields }: { data: any[]; fields: stri
         </Box>
     );
 }
+

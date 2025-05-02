@@ -438,7 +438,7 @@ const DataTable: React.FC<DataTableProps> = ({
 };
 
 // Main Component
-export function UserView(): JSX.Element {
+export function UserView() {
   const [tables, setTables] = useState<TableData[]>([]);
   const [newTableName, setNewTableName] = useState('');
   const [createTableOpen, setCreateTableOpen] = useState(false);
