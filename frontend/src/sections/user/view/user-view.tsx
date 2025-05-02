@@ -30,7 +30,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { UserChartGenerator } from '../user-chart-generator';
 
 
-
+const backendUrl = 'https://dynamic-table-backend.vercel.app/';
 
 // Custom components
 const DashboardContent: React.FC<{ children: React.ReactNode }> = ({ children }) => (
@@ -174,12 +174,12 @@ const applyFilter = ({
 };
 
 const getComparator = (order: 'asc' | 'desc', orderBy: string) => (a: Record<string, unknown>, b: Record<string, unknown>): number => {
-    const valueA = a[orderBy] ?? '';
-    const valueB = b[orderBy] ?? '';
-    return order === 'asc'
-      ? String(valueA).localeCompare(String(valueB))
-      : String(valueB).localeCompare(String(valueA));
-  };
+  const valueA = a[orderBy] ?? '';
+  const valueB = b[orderBy] ?? '';
+  return order === 'asc'
+    ? String(valueA).localeCompare(String(valueB))
+    : String(valueB).localeCompare(String(valueA));
+};
 
 const emptyRows = (page: number, rowsPerPage: number, dataLength: number): number =>
   Math.max(0, (1 + page) * rowsPerPage - dataLength);
@@ -452,12 +452,12 @@ export function UserView() {
 
   const fetchTables = async () => {
     try {
-      const response = await axios.get<{ name: string }[]>('http://localhost:5000/api/tables');
+      const response = await axios.get<{ name: string }[]>(`${backendUrl}/api/tables`);
       const tablesData = await Promise.all(
         response.data.map(async (table) => {
           try {
             const recordsResponse = await axios.get<Record<string, unknown>[]>(
-              `http://localhost:5000/api/records/${table.name}`
+              `${backendUrl}/api/records/${table.name}`
             );
             const records = recordsResponse.data;
             const headers =
@@ -480,7 +480,7 @@ export function UserView() {
 
   const handleAddRecord = async (tableName: string, record: Record<string, unknown>) => {
     try {
-      await axios.post(`http://localhost:5000/api/records/${tableName}/add`, record);
+      await axios.post(`${backendUrl}/api/records/${tableName}/add`, record);
       await fetchTables();
     } catch (error) {
       console.error('Error adding record:', error);
@@ -498,7 +498,7 @@ export function UserView() {
       return;
     }
     try {
-      await axios.post('http://localhost:5000/api/tables', { name: newTableName });
+      await axios.post(`${backendUrl}/api/tables`, { name: newTableName });
       setNewTableName('');
       setCreateTableOpen(false);
       await fetchTables();
@@ -525,7 +525,7 @@ export function UserView() {
       const table = tables.find((t) => t.name === tableName);
 
       if (!table) {
-        await axios.post('http://localhost:5000/api/tables', { name: tableName });
+        await axios.post(`${backendUrl}/api/tables`, { name: tableName });
       } else if (table.headers.length > 0) {
         if (!columns.every((col) => table.headers.includes(col))) {
           alert('Uploaded data headers do not match table structure');
@@ -533,7 +533,7 @@ export function UserView() {
         }
       }
 
-      await axios.post(`http://localhost:5000/api/records/${tableName}`, data);
+      await axios.post(`${backendUrl}/api/records/${tableName}`, data);
       await fetchTables();
     } catch (error) {
       console.error('Error uploading file:', error);
