@@ -11,7 +11,7 @@ const app = express();
 
 app.get('/', (req, res) => {
     res.send('Hello World!');
-})l
+})
 
 app.use(cors({ origin: '*', methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'] }));
 app.use(express.json());
