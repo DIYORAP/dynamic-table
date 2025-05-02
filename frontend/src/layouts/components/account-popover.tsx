@@ -4,17 +4,14 @@ import { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
 import Popover from '@mui/material/Popover';
 import Divider from '@mui/material/Divider';
 import MenuList from '@mui/material/MenuList';
-import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuItem, { menuItemClasses } from '@mui/material/MenuItem';
 
 import { useRouter, usePathname } from 'src/routes/hooks';
 
-import { _myAccount } from 'src/_mock';
 
 // ----------------------------------------------------------------------
 
@@ -63,11 +60,7 @@ export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps)
           ...sx,
         }}
         {...other}
-      >
-        <Avatar src={_myAccount.photoURL} alt={_myAccount.displayName} sx={{ width: 1, height: 1 }}>
-          {_myAccount.displayName.charAt(0).toUpperCase()}
-        </Avatar>
-      </IconButton>
+       />
 
       <Popover
         open={!!openPopover}
@@ -81,15 +74,7 @@ export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps)
           },
         }}
       >
-        <Box sx={{ p: 2, pb: 1.5 }}>
-          <Typography variant="subtitle2" noWrap>
-            {_myAccount?.displayName}
-          </Typography>
 
-          <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {_myAccount?.email}
-          </Typography>
-        </Box>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
