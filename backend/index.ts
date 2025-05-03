@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
     res.send('Hello World!');
 })
 
-app.use(cors({ origin: '*', methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'] }));
+app.use(cors({ origin: 'https://dynamic-table-tt9s-d6qd1d1ov-diyoraps-projects.vercel.app', methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'] }));
 app.use(express.json());
 app.use('/api', recordRoutes);
 
