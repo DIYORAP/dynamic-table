@@ -392,6 +392,7 @@ const DataTable: React.FC<DataTableProps> = ({
             <TableBody>
               {dataFiltered
                 .slice(table.page * table.rowsPerPage, table.page * table.rowsPerPage + table.rowsPerPage)
+                .filter((row) => row && Object.keys(row).length > 1)
                 .map((row, idx) => {
                   const rowId = (row.id as string) || (row.name as string) || `row-${idx}`;
                   return (
